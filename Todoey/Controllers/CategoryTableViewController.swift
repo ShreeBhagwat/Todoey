@@ -7,20 +7,22 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
-var categories = [Category]()
-let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
    
+let realm = try! Realm()
+     var categories : Results<Category>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadCategories()
     }
         //MARK:- TableView DataSource Method.
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ??  1
     }
     
     
@@ -28,8 +30,8 @@ let context = (UIApplication.shared.delegate as! AppDelegate).persistentContaine
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         
-        let category = categories[indexPath.row]
-        cell.textLabel?.text = category.name
+      cell.textLabel?.text = categories?[indexPath.row].name ?? "Categories Not Added Yet"
+        
         
         return cell
         
@@ -37,22 +39,21 @@ let context = (UIApplication.shared.delegate as! AppDelegate).persistentContaine
         
         
         //MARK:- Data Manuplation Method.
-    func saveItems() {
+    func save(category : Category) {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch {
             print("Error saving Category Items\(error)")
         }
         tableView.reloadData()
     }
+   
     func loadCategories(){
-        let request : NSFetchRequest<Category> = Category.fetchRequest()
         
-        do{
-             categories = try context.fetch(request)
-        } catch {
-            print("Error Fetching categories\(error)")
-        }
+        categories = realm.objects(Category.self)
+        
         tableView.reloadData()
     }
     
@@ -68,10 +69,10 @@ let context = (UIApplication.shared.delegate as! AppDelegate).persistentContaine
         let action = UIAlertAction(title: "Add New Category", style: .default) { (action) in
          //What will happen when button is pressed
       
-        let newCategory = Category(context: self.context)
+        let newCategory = Category()
         newCategory.name = textFiled.text!
-        self.categories.append(newCategory)
-        self.saveItems()
+        
+        self.save(category: newCategory)
         self.tableView.reloadData()
         }
         alert.addTextField { (addTextFiled) in
@@ -96,7 +97,7 @@ let context = (UIApplication.shared.delegate as! AppDelegate).persistentContaine
     let destinationVC = segue.destination as! TodoViewController
         
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categories[indexPath.row]
+            destinationVC.selectedCategory = categories?[indexPath.row]
         }
         
     }
