@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TodoViewController: UITableViewController {
+class TodoViewController: SwipeTableViewController {
 
     
    var todoItems : Results<Item>?
@@ -37,7 +37,7 @@ class TodoViewController: UITableViewController {
         }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 //        print("CellForRow")
        
         if let item = todoItems?[indexPath.row] {
