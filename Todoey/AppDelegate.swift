@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+import SwipeCellKit 
 import RealmSwift
 
 @UIApplicationMain
