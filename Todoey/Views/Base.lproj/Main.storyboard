@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Todey-->
+        <!--Todoey-->
         <scene sceneID="4Wd-9s-uU0">
             <objects>
                 <tableViewController id="xBz-M4-AnO" customClass="CategoryTableViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -32,7 +32,7 @@
                             <outlet property="delegate" destination="xBz-M4-AnO" id="2cm-Ns-jLf"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todey" id="X2T-Se-vVi">
+                    <navigationItem key="navigationItem" title="Todoey" id="X2T-Se-vVi">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="mMW-zc-3t9">
                             <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
@@ -65,7 +65,7 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="oFL-Oy-lO2">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="oFL-Oy-lO2" customClass="SwipeTableViewCell" customModule="SwipeCellKit">
                                 <rect key="frame" x="0.0" y="72" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oFL-Oy-lO2" id="Vtt-2o-UBL">
@@ -79,14 +79,16 @@
                             <outlet property="delegate" destination="TOx-h9-eXP" id="Rrk-Ea-JZo"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Items" id="lTB-Hh-DJb" colorLabel="IBBuiltInLabel-Red">
+                    <navigationItem key="navigationItem" title="Items" id="lTB-Hh-DJb">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="dcL-cZ-rBZ">
-                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="Add:" destination="TOx-h9-eXP" id="T4A-ox-Y3r"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="qt2-lt-lFj" id="A8r-R7-Y7p"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FoY-4Y-ZHg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -97,8 +99,8 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zuO-EU-rwM" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="G8G-ix-msy">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="G8G-ix-msy">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -115,4 +117,5 @@
             <point key="canvasLocation" x="423" y="137"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="0.22352941176470587" green="0.63921568627450975" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

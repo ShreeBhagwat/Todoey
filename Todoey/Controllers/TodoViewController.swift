@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TodoViewController: SwipeTableViewController {
 
@@ -21,6 +22,7 @@ class TodoViewController: SwipeTableViewController {
         }
     }
     
+    @IBOutlet weak var searchBar: UISearchBar!
     
     
     override func viewDidLoad() {
@@ -28,6 +30,25 @@ class TodoViewController: SwipeTableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
 //        loadItems()
+        tableView.separatorStyle = .none
+    }
+    
+        override func viewWillAppear(_ animated: Bool) {
+        guard let colorHex = selectedCategory?.color else {fatalError()}
+        title = selectedCategory?.name
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Bar does not exit")}
+        guard let navBarColor = UIColor(hexString: colorHex) else {fatalError()}
+        navBar.barTintColor = navBarColor
+        navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+        navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
+        searchBar.barTintColor = navBarColor
+
+        }
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let orignalColor = UIColor(hexString: "1D9BF6") else {fatalError()}
+        navigationController?.navigationBar.barTintColor = orignalColor
+        navigationController?.navigationBar.tintColor = FlatWhite()
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: FlatWhite()]
     }
 
     //MARK:- TableView DataSource Methods
@@ -35,14 +56,22 @@ class TodoViewController: SwipeTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todoItems?.count ?? 1
         }
+  
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-//        print("CellForRow")
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+          let cell = super.tableView(tableView, cellForRowAt: indexPath)
        
         if let item = todoItems?[indexPath.row] {
        
         cell.textLabel?.text = item.title
+         
+            if let color = UIColor(hexString: selectedCategory!.color)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)){
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            }
+        
+       
         
         cell.accessoryType = item.done ? .checkmark : .none
         
@@ -117,32 +146,50 @@ class TodoViewController: SwipeTableViewController {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         
         self.tableView.reloadData()
+        tableView.rowHeight = 70.0
+}
+
+    
+    override func UpdateModel(at indexPath: IndexPath) {
+        if let itemsForDeletion = self.todoItems?[indexPath.row] {
+            do {
+            try self.realm.write {
+             self.realm.delete(itemsForDeletion)
+        }
+            }catch {
+                print("Error deletion data\(error)")
+            }
+}
+//        tableView.reloadData()
 }
 }
+
 
     //MARK:- Search Bar Methods
 
     extension TodoViewController : UISearchBarDelegate {
-        
+
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-            
+
             todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
-        
+
             tableView.reloadData()
         }
-        
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
            loadItems()
-            
+
             DispatchQueue.main.async {
              searchBar.resignFirstResponder()
             }
-            
+
         }
     }
 
 }
+
+
 
 
 

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwipeCellKit
+import  ChameleonFramework
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate{
 
@@ -28,10 +29,6 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return cell
         
     }
-    
-    
-    
-    
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
